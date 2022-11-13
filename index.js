@@ -1,6 +1,11 @@
 const express = require('express');
 
 const app = express();
+app.use(express.json())
+
+
+const idgenator = () => Math.floor(Math.random()*1000000)
+
 
 let persons = [
     { 
@@ -22,13 +27,7 @@ let persons = [
         "id": 4,
         "name": "Mary Poppendieck", 
         "number": "39-23-6423122"
-      },
-      { 
-        "id": 5,
-        "name": "Kasra Sororui", 
-        "number": "39-23-6423122"
       }
-
 ]
 
 app.get('/api/persons',(req, res) => {
@@ -53,11 +52,23 @@ app.get('/api/persons/:id',(req, res) =>{
   }
 })
 
-app.delete('/api/persons/:id',(req, res) =>{
+app.delete('/api/persons/:id',(req, res) => {
   const id = Number(req.params.id)
   persons = persons.filter(person => person.id !== id)
 //  console.log('del ->',id,'    porson ->',persons);
   res.status(204).end()
+})
+
+app.post('/api/persons/',(req, res) => {
+//  console.log('body ->',req.body)
+  const newPerson = {
+    id: idgenator(),
+    name: req.body.name,
+    number: req.body.number
+  }
+  persons = persons.concat(newPerson)
+
+  res.json(newPerson)
 })
 
 const PORT = 3001
