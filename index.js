@@ -22,7 +22,13 @@ let persons = [
         "id": 4,
         "name": "Mary Poppendieck", 
         "number": "39-23-6423122"
+      },
+      { 
+        "id": 5,
+        "name": "Kasra Sororui", 
+        "number": "39-23-6423122"
       }
+
 ]
 
 app.get('/api/persons',(req, res) => {
@@ -45,6 +51,13 @@ app.get('/api/persons/:id',(req, res) =>{
     res.status(404)
     .end()
   }
+})
+
+app.delete('/api/persons/:id',(req, res) =>{
+  const id = Number(req.params.id)
+  persons = persons.filter(person => person.id !== id)
+//  console.log('del ->',id,'    porson ->',persons);
+  res.status(204).end()
 })
 
 const PORT = 3001
