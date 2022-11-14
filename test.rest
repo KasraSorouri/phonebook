@@ -1,0 +1,11 @@
+DELETE HTTP://localhost:3001/api/persons/5
+
+###
+
+POST https://mighty-wave-52798.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name":"Kasra Soroghkjnhjhkjuri",
+    "number":"099-999 88888"
+}
