@@ -1,6 +1,9 @@
+require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person');
+const person = require('./models/person');
 
 const app = express();
 app.use(cors());
@@ -12,7 +15,7 @@ morgan.token('body', req => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms  :body'));
 const idgenator = () => Math.floor(Math.random()*1000000)
 
-
+/*
 let persons = [
     { 
         "id": 1,
@@ -35,9 +38,11 @@ let persons = [
         "number": "39-23-6423122"
       }
 ]
-
+*/
 app.get('/api/persons',(req, res) => {
-  res.json(persons)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
 })
 
 app.get('/info',(req, res) =>{  
