@@ -13,7 +13,7 @@ morgan.token('body', req => {
   return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms  :body'));
-const idgenator = () => Math.floor(Math.random()*1000000)
+//const idgenator = () => Math.floor(Math.random()*1000000)
 
 /*
 let persons = [
@@ -72,10 +72,11 @@ app.delete('/api/persons/:id',(req, res, next) => {
 //  console.log('del ->',id,'    porson ->',persons);
 })
 
-app.post('/api/persons/',(req, res) => {
-  console.log('body ->',req.body)
+app.post('/api/persons/',(req, res, next) => {
+//  console.log('body ->',req.body)
   if (req.body.name) {
-    console.log('name', req.body.name);
+//    console.log('name', req.body.name);
+    
 //    const existPeson = persons.find(person => person.name === req.body.name) 
 //    if (existPeson) {
 //      res.json({Error: 'name must be unique'})
@@ -88,12 +89,13 @@ app.post('/api/persons/',(req, res) => {
 //    persons = persons.concat(newPerson)
       newPerson.save().then(savedPerson => {
         res.json(savedPerson)
-      })
+      }).catch(error => next(error))
   } else {
     console.log('name must be provided');
   res.json({Error: 'name must be provided'})
 }
 }) 
+
 
 const errorHandler = (error, req, res, next) => {
   console.error(error.message)
