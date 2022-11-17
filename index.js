@@ -92,10 +92,22 @@ app.post('/api/persons/',(req, res, next) => {
       }).catch(error => next(error))
   } else {
     console.log('name must be provided');
-  res.json({Error: 'name must be provided'})
+    return res.status(406).json({error: 'name must be provided!'})
 }
 }) 
 
+app.put('/api/persons/:id',(req, res, next) => {
+
+  const newPerson = {
+    name: req.body.name,
+    number: req.body.number,
+  }
+
+  Person.findByIdAndUpdate(req.params.id,newPerson,{ new : true })
+    .then(updatePerson => {
+      res.json(updatePerson)
+  }).catch(error => next(error))
+})
 
 const errorHandler = (error, req, res, next) => {
   console.error(error.message)
