@@ -71,20 +71,24 @@ app.delete('/api/persons/:id',(req, res) => {
 })
 
 app.post('/api/persons/',(req, res) => {
-//  console.log('body ->',req.body)
+  console.log('body ->',req.body)
   if (req.body.name) {
-    const existPeson = persons.find(person => person.name === req.body.name) 
-    if (existPeson) {
-      res.json({Error: 'name must be unique'})
-    } else {
-      const newPerson = {
-        id: idgenator(),
+    console.log('name', req.body.name);
+//    const existPeson = persons.find(person => person.name === req.body.name) 
+//    if (existPeson) {
+//      res.json({Error: 'name must be unique'})
+//    } else {
+      const newPerson = new Person({
+//        id: idgenator(),
         name: req.body.name,
-        number: req.body.number
-      }
-    persons = persons.concat(newPerson)
-    res.json(newPerson)
-  }} else {
+        number: req.body.number,
+      })
+//    persons = persons.concat(newPerson)
+      newPerson.save().then(savedPerson => {
+        res.json(savedPerson)
+      })
+  } else {
+    console.log('name must be provided');
   res.json({Error: 'name must be provided'})
 }
 }) 
