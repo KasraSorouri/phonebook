@@ -47,20 +47,26 @@ app.get('/api/persons',(req, res, next) => {
 
 app.get('/info',(req, res) =>{  
   const time = new Date()
-  res.send(`<p>Phonebook has infor for ${persons.length} people </p>
-            <p>${time.toString()}</p>`)
+  Person.count({}).then(qty =>{
+    res.send(`<p>Phonebook has info for ${qty} people </p>
+    <p>${time.toString()}</p>`)
+  }).catch(error => next(error))
+
 })
 
-app.get('/api/persons/:id',(req, res) =>{
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
+app.get('/api/persons/:id',(req, res, next) =>{
+//  const id = Number(req.params.id)
+//  const person = persons.find(person => person.id === id)
+  Person.findById(req.params.id).then(person =>{
+      res.json(person)
+  }).catch(error => next(error))
 
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404)
-    .end()
-  }
+//  if (person) {
+ //   res.json(person)
+//  } else {
+//    res.status(404)
+ //   .end()
+//  }
 })
 
 app.delete('/api/persons/:id',(req, res, next) => {
