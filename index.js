@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person');
 const person = require('./models/person');
+const { exists } = require('./models/person');
 
 const app = express();
 app.use(cors());
@@ -81,21 +82,28 @@ app.delete('/api/persons/:id',(req, res, next) => {
 app.post('/api/persons/',(req, res, next) => {
 //  console.log('body ->',req.body)
   if (req.body.name) {
+    Person.findOne({name : req.body.name}).then(existPerson =>{
+      if (existPerson) {
+        console.log('existPerson', existPerson)
+        return res.status(400).json({error: 'name must be unique'})
+      } else {
 //    console.log('name', req.body.name);
     
 //    const existPeson = persons.find(person => person.name === req.body.name) 
 //    if (existPeson) {
 //      res.json({Error: 'name must be unique'})
 //    } else {
-      const newPerson = new Person({
-//        id: idgenator(),
-        name: req.body.name,
-        number: req.body.number,
-      })
-//    persons = persons.concat(newPerson)
-      newPerson.save().then(savedPerson => {
-        res.json(savedPerson)
-      }).catch(error => next(error))
+       const newPerson = new Person({
+    //        id: idgenator(),
+            name: req.body.name,
+            number: req.body.number,
+          })
+    //    persons = persons.concat(newPerson)
+          newPerson.save().then(savedPerson => {
+            res.json(savedPerson)
+          }).catch(error => next(error))
+        }
+    })
   } else {
     console.log('name must be provided');
     return res.status(406).json({error: 'name must be provided!'})
